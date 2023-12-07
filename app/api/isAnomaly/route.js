@@ -1,4 +1,4 @@
-import useScript from "@/app/hooks/useScript";
+import useScript from "@/hooks/useScript";
 import * as fs from "fs";
 import * as path from "path";
 

@@ -8,7 +8,7 @@ export default function Home() {
   const [val, setVal] = useState("");
   const [pred, setPred] = useState();
   const [anomalyType, setAnomalyType] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [isChanging, setIsChanging] = useState(true);
 
   const submitHandler = () => {
