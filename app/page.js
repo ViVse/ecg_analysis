@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import ChartComponent from "./Chart";
+import ChartComponent from "./components/ui/Chart";
+import Spinner from "./components/ui/Spinner";
 
 export default function Home() {
   const [val, setVal] = useState("");
   const [pred, setPred] = useState();
   const [anomalyType, setAnomalyType] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [isChanging, setIsChanging] = useState(true);
 
   const submitHandler = () => {
@@ -31,7 +32,7 @@ export default function Home() {
   };
 
   return (
-    <main className="bg-gradient-to-r from-indigo-800 via-purple-700 to-gray-800 min-h-screen flex justify-center pt-20">
+    <main className="min-h-screen flex justify-center pt-20">
       <div className="w-[600px] bg-white h-fit py-14 px-16 rounded-2xl">
         <h1 className="text-3xl font-bold">ECG anomaly detection</h1>
         <p className="mt-3">Enter your data (as an array)</p>
@@ -49,7 +50,11 @@ export default function Home() {
           onClick={submitHandler}>
           Submit
         </button>
-        {loading && <p>Loading...</p>}
+        {loading && (
+          <div className="flex justify-center mt-3">
+            <Spinner />
+          </div>
+        )}
         {!loading && !isChanging && pred !== undefined && pred !== null && (
           <div className="mt-5">
             <ChartComponent data={JSON.parse(val)} />
