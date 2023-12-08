@@ -32,7 +32,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex justify-center pt-10">
+    <main className="flex justify-center pt-10">
       <div className="w-[600px] bg-white h-fit py-14 px-16 rounded-2xl">
         <h1 className="text-3xl font-bold">ECG anomaly detection</h1>
         <p className="mt-3">Enter your data (as an array)</p>
