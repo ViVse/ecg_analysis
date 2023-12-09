@@ -38,6 +38,9 @@ export default function Home() {
         {isLoading && <Spinner />}
         {!isLoading &&
           predictions.map((pred) => <Prediction pred={pred} key={pred._id} />)}
+        {!isLoading && predictions.length === 0 && (
+          <p>You have no predictions</p>
+        )}
       </div>
     </main>
   );
