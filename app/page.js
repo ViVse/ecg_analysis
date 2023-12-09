@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Formik, Form } from "formik";
 import ChartComponent from "./components/ui/Chart";
 import Spinner from "./components/ui/Spinner";

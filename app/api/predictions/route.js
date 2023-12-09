@@ -17,3 +17,20 @@ export async function POST(req) {
     );
   }
 }
+
+export async function GET(req) {
+  try {
+    await connectDB();
+    const { searchParams } = new URL(req.url);
+    const user = searchParams.get("user");
+    const predictions = await Prediction.find({ user });
+    return NextResponse.json(predictions);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: `Error occured while getting prediction: ${error.message}`,
+      },
+      { status: 500 }
+    );
+  }
+}

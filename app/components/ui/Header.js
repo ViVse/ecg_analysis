@@ -12,9 +12,16 @@ const Header = () => {
       </Link>
       <div>
         {status === "authenticated" && (
-          <p className="cursor-pointer" onClick={signOut}>
-            Logout
-          </p>
+          <>
+            <Link
+              href="/predictions"
+              className="pr-2 border-r border-solid border-green-800">
+              My predictions
+            </Link>
+            <p className="pl-2 cursor-pointer inline-block" onClick={signOut}>
+              Logout
+            </p>
+          </>
         )}
         {status === "unauthenticated" && (
           <>
