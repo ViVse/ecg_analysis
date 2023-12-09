@@ -33,10 +33,12 @@ export default function Home() {
   }, [session, status]);
 
   return (
-    <main className="flex flex-col px-24 justify-center pt-10">
-      {isLoading && <Spinner />}
-      {!isLoading &&
-        predictions.map((pred) => <Prediction pred={pred} key={pred._id} />)}
+    <main className="flex w-screen px-24 justify-center pt-10">
+      <div>
+        {isLoading && <Spinner />}
+        {!isLoading &&
+          predictions.map((pred) => <Prediction pred={pred} key={pred._id} />)}
+      </div>
     </main>
   );
 }

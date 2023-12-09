@@ -23,7 +23,7 @@ export async function GET(req) {
     await connectDB();
     const { searchParams } = new URL(req.url);
     const user = searchParams.get("user");
-    const predictions = await Prediction.find({ user });
+    const predictions = await Prediction.find({ user }).sort({ createdAt: -1 });
     return NextResponse.json(predictions);
   } catch (error) {
     return NextResponse.json(
