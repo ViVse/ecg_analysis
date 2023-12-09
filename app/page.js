@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Formik, Form } from "formik";
 import ChartComponent from "./components/ui/Chart";
 import Spinner from "./components/ui/Spinner";
@@ -14,6 +14,7 @@ export default function Home() {
   const [anomalyType, setAnomalyType] = useState("");
   const [loading, setLoading] = useState(false);
   const [isChanging, setIsChanging] = useState(true);
+  const fileRef = useRef();
 
   const submitHandler = (values) => {
     setIsChanging(false);
@@ -54,6 +55,15 @@ export default function Home() {
     }
   };
 
+  const readFile = (e, setData) => {
+    let reader = new FileReader();
+    reader.readAsText(e.target.files[0]);
+    reader.onload = () => {
+      console.log(reader.result);
+      setData(reader.result);
+    };
+  };
+
   return (
     <main className="flex justify-center pt-10">
       <Formik
@@ -63,7 +73,7 @@ export default function Home() {
         }}
         validationSchema={predictionValidation}
         onSubmit={submitHandler}>
-        {({ errors, touched, values }) => {
+        {({ errors, touched, values, setFieldValue }) => {
           return (
             <Form className="w-[600px] bg-white h-fit py-6 px-16 rounded-2xl">
               <h1 className="text-3xl font-bold mb-4">ECG anomaly detection</h1>
@@ -80,13 +90,27 @@ export default function Home() {
                 errors={errors.data}
                 touched={touched.data}
               />
-              <button
-                className="bg-black px-6 py-2 mt-3 text-white"
-                type="submit">
-                Submit
-              </button>
+              <input
+                type="file"
+                ref={fileRef}
+                className="hidden w-0"
+                onChange={(e) => readFile(e, setFieldValue.bind(null, "data"))}
+              />
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  className="bg-black px-6 py-2 mt-3 text-white"
+                  onClick={() => fileRef.current.click()}>
+                  Upload data from file
+                </button>
+                <button
+                  className="bg-black px-6 py-2 mt-3 text-white"
+                  type="submit">
+                  Submit
+                </button>
+              </div>
               {loading && (
-                <div className="flex justify-center mt-3">
+                <div className="flex justify-center mt-6">
                   <Spinner />
                 </div>
               )}
