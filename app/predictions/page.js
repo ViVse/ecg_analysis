@@ -33,7 +33,7 @@ export default function Home() {
   }, [session, status]);
 
   return (
-    <main className="flex w-screen px-24 justify-center pt-10">
+    <main className="flex w-screen justify-center pt-10">
       <div>
         {isLoading && <Spinner />}
         {!isLoading &&
