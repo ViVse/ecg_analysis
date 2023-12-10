@@ -34,3 +34,37 @@ export async function GET(req) {
     );
   }
 }
+
+export async function PATCH(req) {
+  try {
+    await connectDB();
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    const prediction = await Prediction.findById(id);
+    if (!prediction) {
+      return NextResponse.json(
+        {
+          message: `Couldn't find prediction with given id: ${error.message}`,
+        },
+        { status: 404 }
+      );
+    }
+
+    const { isPredictionAccepted, doctorPrediction } = await req.json();
+    prediction.isChecked = true;
+    prediction.isPredictionAccepted = isPredictionAccepted;
+    if (!isPredictionAccepted) {
+      prediction.doctorPrediction = doctorPrediction;
+    }
+    await prediction.save();
+    return NextResponse.json(prediction);
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: `Error occured while getting prediction: ${error.message}`,
+      },
+      { status: 500 }
+    );
+  }
+}

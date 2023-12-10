@@ -59,7 +59,6 @@ export default function Home() {
     let reader = new FileReader();
     reader.readAsText(e.target.files[0]);
     reader.onload = () => {
-      console.log(reader.result);
       setData(reader.result);
     };
   };

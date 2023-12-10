@@ -19,6 +19,22 @@ const predictionSchema = mongoose.Schema(
       required: true,
       ref: "User",
     },
+    isChecked: {
+      type: Boolean,
+      default: false,
+    },
+    isPredictionAccepted: {
+      type: Boolean,
+      required: function () {
+        return this.isChecked;
+      },
+    },
+    doctorPrediction: {
+      type: String,
+      required: function () {
+        return this.isChecked && !this.isPredictionAccepted;
+      },
+    },
   },
   {
     timestamps: true,
