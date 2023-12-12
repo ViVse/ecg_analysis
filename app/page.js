@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import { Formik, Form } from "formik";
 import ChartComponent from "./components/ui/Chart";
 import Spinner from "./components/ui/Spinner";
 import { predictionValidation } from "@/validation/predictionValidation";
 import FormField from "./components/ui/FormField";
-import { useSession } from "next-auth/react";
+import accuracyInfo from "@/const/networkInfo";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -56,6 +57,7 @@ export default function Home() {
   };
 
   const readFile = (e, setData) => {
+    if (!e.target.files) return;
     let reader = new FileReader();
     reader.readAsText(e.target.files[0]);
     reader.onload = () => {
@@ -121,25 +123,34 @@ export default function Home() {
                     <ChartComponent data={JSON.parse(values.data)} />
                     <h2 className="mt-3 font-bold">Your prediction:</h2>
                     <p>
-                      {pred === 0 ? "Anomaly detected" : "No anomaly detected"}
+                      {pred === 0
+                        ? `Anomaly detected (${accuracyInfo.anomaly}%)`
+                        : `No anomaly detected (${accuracyInfo.normal}%)`}
                     </p>
-                    {pred === 0 && <p>Anomaly type: {anomalyType}</p>}
-                    <button
-                      type="button"
-                      className="bg-black px-6 py-2 mt-3 text-white"
-                      onClick={() => {
-                        const predString =
-                          pred === 0
-                            ? `Anomaly detected. Anomaly type: ${anomalyType} `
-                            : "No anomaly detected";
-                        saveResultsHandler(
-                          values.patientName,
-                          JSON.parse(values.data),
-                          predString
-                        );
-                      }}>
-                      Save results
-                    </button>
+                    {pred === 0 && (
+                      <p>
+                        Anomaly type: {anomalyType} ({accuracyInfo[anomalyType]}
+                        %)
+                      </p>
+                    )}
+                    {session && (
+                      <button
+                        type="button"
+                        className="bg-black px-6 py-2 mt-3 text-white"
+                        onClick={() => {
+                          const predString =
+                            pred === 0
+                              ? `Anomaly detected (${accuracyInfo.anomaly}%). Anomaly type: ${anomalyType} (${accuracyInfo[anomalyType]}%)`
+                              : `No anomaly detected (${accuracyInfo.normal}%)`;
+                          saveResultsHandler(
+                            values.patientName,
+                            JSON.parse(values.data),
+                            predString
+                          );
+                        }}>
+                        Save results
+                      </button>
+                    )}
                   </div>
                 )}
             </Form>
