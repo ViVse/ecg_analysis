@@ -9,6 +9,7 @@ export default function Home() {
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useState(true);
   const [predictions, setPredictions] = useState([]);
+  const [checkedNumber, setCheckedNumber] = useState(0);
 
   useEffect(() => {
     if (status !== "authenticated" || !session.user) return;
@@ -26,7 +27,8 @@ export default function Home() {
         console.log(errorData.message);
       } else {
         const data = await res.json();
-        setPredictions(data);
+        setCheckedNumber(data.checkedCount);
+        setPredictions(data.predictions);
       }
       setIsLoading(false);
     })();
@@ -35,9 +37,18 @@ export default function Home() {
   return (
     <main className="flex w-screen justify-center pt-10">
       <div>
+        <h1 className="text-2xl font-medium mb-2">My predictions</h1>
         {isLoading && <Spinner />}
-        {!isLoading &&
-          predictions.map((pred) => <Prediction pred={pred} key={pred._id} />)}
+        {!isLoading && (
+          <>
+            <p className="text-lg mb-2">
+              Number of checked entries inside db: {checkedNumber}
+            </p>
+            {predictions.map((pred) => (
+              <Prediction pred={pred} key={pred._id} />
+            ))}
+          </>
+        )}
         {!isLoading && predictions.length === 0 && (
           <p>You have no predictions</p>
         )}
