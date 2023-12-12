@@ -24,7 +24,8 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const user = searchParams.get("user");
     const predictions = await Prediction.find({ user }).sort({ createdAt: -1 });
-    return NextResponse.json(predictions);
+    const checkedCount = await Prediction.countDocuments({ isChecked: true });
+    return NextResponse.json({ predictions, checkedCount });
   } catch (error) {
     return NextResponse.json(
       {
